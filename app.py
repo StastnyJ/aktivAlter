@@ -29,7 +29,7 @@ def get_schedule_action(phoneNumber: str):
 @app.route('/whatsapp', methods=['POST'])
 def whatsapp():
     incoming_msg = request.values.get('Body', '')
-    phoneNumber = request.values.get("from")
+    phoneNumber = request.values.get("From")
 
     response = Chatbot(phoneNumber).process_message(incoming_msg, get_schedule_action(phoneNumber))
 
