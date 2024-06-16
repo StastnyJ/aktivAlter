@@ -1,7 +1,7 @@
 import os
 import json 
 from typing import Callable
-from mock.conversation_en import conversation_en # TODO German
+from conversation_en import conversation_en # TODO German
 
 EMPTY_STATE = {
     "state":"new", 
