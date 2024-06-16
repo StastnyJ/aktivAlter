@@ -17,7 +17,7 @@ twilio_number = os.getenv('TWILIO_NUMBER')
 client = Client(account_sid, auth_token)
 
 def run_scheduled_action(action: str, phoneNumber: str):
-    chatbot = Chatbot("1234")
+    chatbot = Chatbot(phoneNumber)
     response = chatbot.send_scheduled_action(action)
     client.messages.create(body=response, from_=twilio_number, to=phoneNumber)
 
