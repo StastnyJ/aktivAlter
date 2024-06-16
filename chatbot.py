@@ -1,6 +1,6 @@
 import os
 import json 
-from typing import Callable
+from typing import Callable, List
 from conversation_en import conversation_en # TODO German
 
 EMPTY_STATE = {
@@ -13,7 +13,7 @@ class Chatbot:
         self.id = id
         self.state = self._load_history(id)
 
-    def _load_history(self, id: str) -> list[str]:
+    def _load_history(self, id: str) -> List[str]:
         if not os.path.exists("data"):
             os.mkdir("data")
         if not os.path.exists(os.path.join("data", id)):
