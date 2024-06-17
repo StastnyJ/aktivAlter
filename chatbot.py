@@ -66,8 +66,8 @@ class Chatbot:
         return response
     
     def detect_language(self, message: str) -> str:
-        german_defaults = ["servus", "hallo"]
-        english_defaults = ["hello", "hi"]
+        german_defaults = ["servus", "hallo", "ja", "nein", "klar"]
+        english_defaults = ["hello", "hi", "yes", "no", "sure"]
 
         for d in german_defaults:
             if  d in message.lower():
