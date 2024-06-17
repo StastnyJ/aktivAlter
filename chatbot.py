@@ -1,7 +1,11 @@
 import os
 import json 
 from typing import Callable, List
-from conversation_en import conversation_en # TODO German
+from conversation_en import conversation_en
+from conversation_de import conversation_de
+from langdetect import detect_langs, DetectorFactory
+
+DetectorFactory.seed = 0
 
 EMPTY_STATE = {
     "state":"new", 
@@ -35,10 +39,12 @@ class Chatbot:
             self._save_sate()
             return "Message history was removed."
         
+        conversation = self.detect_language(message)
+        
         response = ""
         next_state = "new"
         action = None
-        possible_responses = conversation_en[self.state["state"]]
+        possible_responses = conversation[self.state["state"]]
         for act in possible_responses:
             if len(response) > 0:
                 break
@@ -59,10 +65,38 @@ class Chatbot:
         self._save_sate()
         return response
     
+    def detect_language(self, message: str) -> str:
+        german_defaults = ["servus", "hallo"]
+        english_defaults = ["hello", "hi"]
+
+        for d in german_defaults:
+            if  d in message.lower():
+                return conversation_de
+        for d in english_defaults:
+            if  d in message.lower():
+                return conversation_en
+            
+        try:
+            langs = detect_langs(message)
+            german_confidence = 0
+            english_confidence = 0
+            for lang in langs:
+                if lang.lang == "de":
+                    german_confidence = lang.prob
+                if lang.lang == "en":
+                    english_confidence = lang.prob
+            if german_confidence > english_confidence:
+                return conversation_de
+            else:
+                return conversation_en
+        except:
+            return conversation_en
+    
     def send_scheduled_action(self, action: str) -> str:
+        conversation = self.detect_language(self.state["messages"][-1]["resp"])
         if action == "sendNotification":
-            message = conversation_en["notification"]["message"]
-            self.state["state"] = conversation_en["notification"]["next"]
+            message = conversation["notification"]["message"]
+            self.state["state"] = conversation["notification"]["next"]
             self.state["messages"].append({"msg": "", "resp": message})
             self._save_sate()
             return message

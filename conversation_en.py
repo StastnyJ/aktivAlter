@@ -2,7 +2,7 @@ conversation_en = {
     "new": [
         {
             "keywords": [""],
-            "response": "Hi, I am Akivälter and I am gonna help you to help you with finding amazing events in your neighborhood and connecting you with other people who are interested in your place. First, let me ask you a few questions to help me make a better suggestions. First, I would like to ask you, what U-Bahn or S-Bahn station is closest to the place where you live. If you are not comfortable with sharing your location, just tell me, but if you tell me, I could suggest you better events and connect you with people closer to you.",
+            "response": "Hi, I am Akivälter and I am gonna help you you with finding amazing events in your neighborhood and connecting you with other people living near you who are interested in the same kind of activities. First, let me ask you a few questions to help me make a better suggestions. First, I would like to ask you, what U-Bahn or S-Bahn station is closest to the place where you live. If you are not comfortable with sharing your location, just tell me, but if you tell me, I could suggest you better events and connect you with people closer to you.",
             "next": "locationAsked"
         }
     ],
