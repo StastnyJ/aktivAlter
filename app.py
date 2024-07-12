@@ -28,19 +28,21 @@ def get_schedule_action(phoneNumber: str):
 
 @app.route('/', methods=['GET'])
 def ping():
-    return "Aktiva aelter chat bot API"
+    return "Aktiv aelter chat bot API"
 
 @app.route('/whatsapp', methods=['POST'])
 def whatsapp():
-    incoming_msg = request.values.get('Body', '')
-    phoneNumber = request.values.get("From")
+    try:
+        incoming_msg = request.values.get('Body', '')
+        phoneNumber = request.values.get("From")
 
-    response = Chatbot(phoneNumber).process_message(incoming_msg, get_schedule_action(phoneNumber))
-    print(request.values)
-    resp = MessagingResponse()
-    msg = resp.message()
-    msg.body(response)
-    return str(resp)
+        response = Chatbot(phoneNumber).process_message(incoming_msg, get_schedule_action(phoneNumber))
+        resp = MessagingResponse()
+        msg = resp.message()
+        msg.body(response)
+        return str(resp)
+    except:
+        return "Unknown error"
 
 if __name__ == '__main__':
     app.run(debug=True, host ='0.0.0.0', port=8099)

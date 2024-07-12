@@ -54,10 +54,11 @@ class Chatbot:
                     next_state = act["next"]
                     if "action" in act:
                         action = act["action"]
+                        timeout = act["actionTimeout"]
                     break
         
         if action is not None:
-            schedule_action(action, 45)
+            schedule_action(action, timeout)
 
         self.state["state"] = next_state
 
@@ -68,6 +69,8 @@ class Chatbot:
     def detect_language(self, message: str) -> str:
         german_defaults = ["servus", "hallo", "ja", "nein", "klar"]
         english_defaults = ["hello", "hi", "yes", "no", "sure"]
+
+        is_german_number =  "+49" in self.id
 
         for d in german_defaults:
             if  d in message.lower():
@@ -85,6 +88,15 @@ class Chatbot:
                     german_confidence = lang.prob
                 if lang.lang == "en":
                     english_confidence = lang.prob
+            if is_german_number:
+                german_confidence *= 2
+            else:
+                english_confidence *= 2
+
+            norm = german_confidence + english_confidence
+            german_confidence = german_confidence / norm
+            english_confidence = english_confidence / norm
+
             if german_confidence > english_confidence:
                 return conversation_de
             else:
@@ -93,10 +105,31 @@ class Chatbot:
             return conversation_en
     
     def send_scheduled_action(self, action: str) -> str:
-        conversation = self.detect_language(self.state["messages"][-1]["resp"])
+        last_message = self.state["messages"][-1]["msg"]
+        conversation = self.detect_language(last_message)
         if action == "sendNotification":
-            message = conversation["notification"]["message"]
+            message = ""
+            messages = conversation["notification"]["messages"]
+            for m in messages:
+                if len(message) > 0:
+                    break
+                for k in m["activities"]:
+                    if k in last_message.lower():
+                        message = m["resp"]
+                        self.state["last_event"] = m["name"]
+
             self.state["state"] = conversation["notification"]["next"]
             self.state["messages"].append({"msg": "", "resp": message})
             self._save_sate()
             return message
+        if action == "sendLocation":
+            message = ""
+            last_event = self.state["last_event"]
+
+            message = conversation["locations"]["locations"][last_event] 
+
+            self.state["state"] = conversation["locations"]["next"]
+            self.state["messages"].append({"msg": "", "resp": message})
+            self._save_sate()
+            return message
+            
