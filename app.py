@@ -26,13 +26,17 @@ def get_schedule_action(phoneNumber: str):
         threading.Timer(time, run_scheduled_action, args=(action,phoneNumber)).start()
     return schedule_action
 
+@app.route('/', methods=['GET'])
+def ping():
+    return "Aktiva aelter chat bot API"
+
 @app.route('/whatsapp', methods=['POST'])
 def whatsapp():
     incoming_msg = request.values.get('Body', '')
     phoneNumber = request.values.get("From")
 
     response = Chatbot(phoneNumber).process_message(incoming_msg, get_schedule_action(phoneNumber))
-
+    print(request.values)
     resp = MessagingResponse()
     msg = resp.message()
     msg.body(response)
