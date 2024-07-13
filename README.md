@@ -1,4 +1,4 @@
-This directory contains the AKTIVALTER chat bot we created for the Tech Challenge class at TUM. 
+This directory contains the AKTIVALTER chatbot we created for the Tech Challenge class at TUM. 
 
 # How to install and run
 
