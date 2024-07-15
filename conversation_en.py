@@ -47,7 +47,7 @@ conversation_en = {
             },{
                 "name": "cafe",
                 "activities": [""],
-                "resp": "TODO - Text for the cafe event" 
+                "resp": "I found a new event that you might like. The "Treffpunkt unter Hundert" organizes a coffee gathering for seniors every day of the week except Wednesdays. There will also be singing and dancing together! Would that be something for you?" 
             }
         ],
         "next": "notificationSent"
